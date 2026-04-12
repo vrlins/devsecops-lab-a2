@@ -17,6 +17,8 @@ spec:
           envFrom: # Carrega TODAS as variáveis do ConfigMap
             - configMapRef:
                 name: app-config
+          securityContext: # Segurança a nível de Container
+            allowPrivilegeEscalation: false # Não pode escalar privilégios
           env: # Variáveis do Secret (individualmente)
             - name: DB_USER
               valueFrom:

@@ -20,6 +20,8 @@ spec:
           image: postgres:16-alpine # Imagem oficial do PostgreSQL
           ports:
             - containerPort: 5432 # Porta que o PostgreSQL escuta
+          securityContext: # Segurança a nível de Container
+            allowPrivilegeEscalation: false # Não pode escalar privilégios
           env: # Variáveis de ambiente diretas
             - name: POSTGRES_DB
               value: devsecops
