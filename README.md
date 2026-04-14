@@ -2,7 +2,7 @@
 
 ## Aula 2 — Shift-Left na Prática: SAST, SCA e Secrets
 
-**Autor:** Victor Raffael Lins Carlota
+**Autor:** Victor Lins
 
 ---
 
