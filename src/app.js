@@ -35,4 +35,6 @@ app.post('/api/validate', (req, res) => {
   });
 });
 
+eval("console.log('inseguro')");
+
 module.exports = app;
