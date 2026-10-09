@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node src/server.js",
     "test": "jest --verbose --coverage",
-    "lint": "eslint src/ tests/"
+    "lint": "eslint src/ tests/",
+    "init-db": "node src/init-db.js"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,8 @@
   },
   "homepage": "https://github.com/vrlins/devsecops-lab-a2#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "express": "^5.2.1",
+    "pg": "^8.23.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
