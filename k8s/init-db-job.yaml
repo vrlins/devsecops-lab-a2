@@ -28,3 +28,5 @@ spec:
                 secretKeyRef:
                   name: db-credentials
                   key: DB_PASSWORD
+          securityContext:              # Segurança a nível de Container
+            allowPrivilegeEscalation: false

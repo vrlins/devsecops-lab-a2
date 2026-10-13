@@ -38,3 +38,5 @@ spec:
               command: ["pg_isready", "-U", "app", "-d", "devsecops"]
             initialDelaySeconds: 5
             periodSeconds: 5
+          securityContext:              # Segurança a nível de Container
+            allowPrivilegeEscalation: false
