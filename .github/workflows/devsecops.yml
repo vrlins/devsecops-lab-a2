@@ -12,7 +12,7 @@ env:
 # Menor privilégio: o GITHUB_TOKEN só lê o repositório
 permissions:
   contents: read
-  packages: write                     # Escrita no GHCR
+  packages: write # Escrita no GHCR
 
 jobs:
   # ============================================
