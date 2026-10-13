@@ -1,6 +1,57 @@
 const express = require('express');
 const app = express();
 
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const cors = require('cors');
+
+
+// Security headers — configuração completa
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'"],
+      styleSrc: ["'self'"],
+      frameAncestors: ["'none'"],      // Previne clickjacking (iframe)
+      formAction: ["'self'"],           // Restringe destino de formulários
+    }
+  }
+}));
+
+// Permissions-Policy: o helmet NÃO emite este header — middleware próprio
+app.use((req, res, next) => {
+  res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  next();
+});
+
+// Atrás de proxy (Render, Ingress), req.ip precisa vir do X-Forwarded-For;
+// sem isso, o rate limit trata todos os usuários como um único IP.
+// Mas SÓ confie no header quando houver proxy: exposto direto, qualquer cliente
+// forja X-Forwarded-For e escapa do rate limit. Por isso é configurável:
+app.set('trust proxy', Number(process.env.TRUST_PROXY_HOPS || 0));   // Render: 1
+
+// Remove "X-Powered-By: Express" (information disclosure)
+app.disable('x-powered-by');
+
+// Rate limiting: 100 requests por 15 minutos por IP
+// /health fica FORA do limite: os probes do kubelet (a cada 5–15s) estourariam
+// 100 req/15min e o pod seria marcado unready / reiniciado com 429.
+app.use(rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100,
+  skip: (req) => req.path === '/health',
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: 'Too many requests, try again later' }
+}));
+
+// CORS restrito (NÃO usar origin: '*' — é finding MEDIUM no ZAP)
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'https://devsecops-lab-a2.onrender.com',
+  methods: ['GET', 'POST'],
+}));
+
 app.use(express.json());
 
 const pool = require('./db');
@@ -66,6 +117,10 @@ app.post('/api/messages', async (req, res) => {
     console.error(err);
     res.status(500).json({ error: 'Database error' });
   }
+});
+
+app.use((req, res) => {
+  res.status(404).json({ error: 'Not found' });
 });
 
 module.exports = app;
