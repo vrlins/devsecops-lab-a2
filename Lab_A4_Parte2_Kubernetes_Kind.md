@@ -549,7 +549,7 @@ kubectl get svc devsecops-svc
 
 ```bash
 # Port-forward: conecta porta local à porta do Service
-kubectl port-forward svc/devsecops-svc 8080:80 &
+kubectl port-forward svc/devsecops-svc 8090:80 &
 # O & roda em background
 ```
 
