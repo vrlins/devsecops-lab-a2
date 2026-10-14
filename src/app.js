@@ -48,7 +48,7 @@ app.use(rateLimit({
 
 // CORS restrito (NÃO usar origin: '*' — é finding MEDIUM no ZAP)
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'https://devsecops-lab-a2.onrender.com',
+  origin: process.env.CORS_ORIGIN || 'https://devsecops-lab-ukxi.onrender.com',
   methods: ['GET', 'POST'],
 }));
 
